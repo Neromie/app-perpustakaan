@@ -21,6 +21,10 @@
                 label { display: block; margin-top: 12px; font-weight: bold; }
         input, select, textarea { width: 100%; max-width: 500px; padding: 6px; margin-top: 4px; }
         .error { color: #b91c1c; font-size: 14px; margin-top: 4px; }
+                .checkbox-list { border: 1px solid #ccc; border-radius: 4px; padding: 10px; margin-top: 4px; max-width: 500px; max-height: 200px; overflow-y: auto; }
+        .checkbox-list label.cb { display: block; font-weight: normal; margin-top: 0; }
+        .checkbox-list input[type="checkbox"] { width: auto; }
+        .readonly { background: #f3f4f6; padding: 8px; border-radius: 4px; margin-top: 4px; max-width: 500px; }
     </style>
 </head>
 <body>
