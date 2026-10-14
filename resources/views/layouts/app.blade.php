@@ -17,14 +17,22 @@
         .alert-success { background: #d1fae5; color: #065f46; padding: 10px 14px; border-radius: 4px; margin-bottom: 16px; }
         .btn { display: inline-block; padding: 6px 14px; background: #2563eb; color: #fff; text-decoration: none; border-radius: 4px; border: none; cursor: pointer; }
         form.inline { display: inline; }
-        footer { text-align: center; padding: 20px; color: #6b7280; font-size: 14px; border-top: 1px solid #e5e7eb; margin-top: 40px; }
-                label { display: block; margin-top: 12px; font-weight: bold; }
+        label { display: block; margin-top: 12px; font-weight: bold; }
         input, select, textarea { width: 100%; max-width: 500px; padding: 6px; margin-top: 4px; }
         .error { color: #b91c1c; font-size: 14px; margin-top: 4px; }
-                .checkbox-list { border: 1px solid #ccc; border-radius: 4px; padding: 10px; margin-top: 4px; max-width: 500px; max-height: 200px; overflow-y: auto; }
+        .checkbox-list { border: 1px solid #ccc; border-radius: 4px; padding: 10px; margin-top: 4px; max-width: 500px; max-height: 200px; overflow-y: auto; }
         .checkbox-list label.cb { display: block; font-weight: normal; margin-top: 0; }
         .checkbox-list input[type="checkbox"] { width: auto; }
         .readonly { background: #f3f4f6; padding: 8px; border-radius: 4px; margin-top: 4px; max-width: 500px; }
+                .badge { display: inline-block; padding: 3px 10px; border-radius: 999px; font-size: 13px; font-weight: bold; }
+        .badge-dipinjam { background: #fef3c7; color: #92400e; }
+        .badge-dikembalikan { background: #d1fae5; color: #065f46; }
+        .badge-terlambat { background: #fee2e2; color: #991b1b; }
+        .badge { display: inline-block; padding: 3px 10px; border-radius: 999px; font-size: 13px; font-weight: bold; }
+        .badge-dipinjam { background: #fef3c7; color: #92400e; }
+        .badge-dikembalikan { background: #d1fae5; color: #065f46; }
+        .badge-terlambat { background: #fee2e2; color: #991b1b; }
+        footer { text-align: center; padding: 20px; color: #6b7280; font-size: 14px; border-top: 1px solid #e5e7eb; margin-top: 40px; }
     </style>
 </head>
 <body>
