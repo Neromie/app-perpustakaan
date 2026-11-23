@@ -3,6 +3,7 @@
 
     @auth
         <ul>
+            <li><a href="{{ route('dashboard') }}" class="{{ request()->routeIs('dashboard') ? 'active' : '' }}">Dashboard</a></li>
             <li><a href="{{ route('books.index') }}" class="{{ request()->routeIs('books.*') ? 'active' : '' }}">Buku</a></li>
 
             @if (auth()->user()->role === 'admin')
@@ -10,12 +11,13 @@
             @endif
 
             <li><a href="{{ route('members.index') }}" class="{{ request()->routeIs('members.*') ? 'active' : '' }}">Anggota</a></li>
-            <li><a href="{{ route('loans.index') }}" class="{{ request()->routeIs('loans.*') ? 'active' : '' }}">Peminjaman</a></li>
+            <li><a href="{{ route('loans.index') }}" class="{{ request()->routeIs('loans.index', 'loans.create', 'loans.show', 'loans.edit') ? 'active' : '' }}">Peminjaman</a></li>
+            <li><a href="{{ route('loans.report') }}" class="{{ request()->routeIs('loans.report') ? 'active' : '' }}">Laporan</a></li>
             <li><a href="{{ route('profil.show') }}" class="{{ request()->routeIs('profil.*') ? 'active' : '' }}">Profil</a></li>
         </ul>
 
         <div class="navbar-user">
-            <span>{{ auth()->user()->name }} ({{ auth()->user()->role }})</span>
+            <span>{{ auth()->user()->name }} ({{ ucfirst(auth()->user()->role) }})</span>
             <form action="{{ route('logout') }}" method="POST" class="inline">
                 @csrf
                 <button type="submit" class="btn-logout">Logout</button>
