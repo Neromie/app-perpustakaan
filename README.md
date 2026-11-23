@@ -1,59 +1,192 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Perpustakaan Digital Kampus
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Aplikasi manajemen perpustakaan kampus berbasis **Laravel 12**, dibangun bertahap sebagai project praktikum mata kuliah Pemrograman Framework (Pertemuan 1-10).
 
-## About Laravel
+## Fitur
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+- **Autentikasi** login/logout berbasis session, dengan dua role: `admin` dan `petugas`
+- **Otorisasi** lewat middleware `admin` - menu dan halaman Kategori khusus admin
+- **CRUD** Buku, Kategori, Anggota, dan Peminjaman (satu transaksi bisa berisi beberapa buku)
+- **Pengembalian buku** dengan badge status (`Dipinjam`, `Dikembalikan`, `Terlambat`)
+- **Halaman Profil** dengan fitur ganti password
+- **REST API** untuk `books`, `members`, `loans`, dan `stats` (dokumentasi lengkap di [`API.md`](API.md))
+- **Dashboard** dan **Laporan Peminjaman** yang mengambil data dari REST API aplikasi sendiri lewat Laravel HTTP Client
+- **Seeder & Factory** untuk data dummy bergaya Indonesia (20 buku, 15 anggota, 10 transaksi)
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Teknologi
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+| Komponen | Versi / Keterangan |
+|---|---|
+| PHP | 8.2 atau lebih baru |
+| Laravel | 12 |
+| Database | MySQL (lewat XAMPP) |
+| Tampilan | Blade + CSS custom (tanpa Tailwind/Bootstrap) |
+| Pengujian API | Postman |
 
-## Learning Laravel
+## Prasyarat
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+Pastikan sudah terpasang di komputer:
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+- [PHP 8.2+](https://www.php.net/) dan [Composer](https://getcomposer.org/)
+- [XAMPP](https://www.apachefriends.org/) (dipakai untuk MySQL)
+- [Git](https://git-scm.com/)
+- [Postman](https://www.postman.com/) (opsional, untuk menguji API)
 
-## Laravel Sponsors
+## Instalasi
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+### 1. Clone repository
 
-### Premium Partners
+```bash
+git clone https://github.com/Neromie/app-perpustakaan.git
+cd app-perpustakaan
+```
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+### 2. Install dependency
 
-## Contributing
+```bash
+composer install
+```
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+### 3. Siapkan file `.env`
 
-## Code of Conduct
+Salin `.env.example` menjadi `.env`, lalu buat application key:
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+```bash
+# Windows (CMD)
+copy .env.example .env
 
-## Security Vulnerabilities
+# Linux / macOS / Git Bash
+cp .env.example .env
+```
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+```bash
+php artisan key:generate
+```
 
-## License
+Cek bagian berikut di `.env` (nilai default di `.env.example` sudah disesuaikan untuk XAMPP):
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+```env
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=db_perpustakaan
+DB_USERNAME=root
+DB_PASSWORD=
+
+# Server kedua khusus panggilan API internal (wajib port berbeda dari server utama)
+INTERNAL_API_URL=http://127.0.0.1:8011
+
+# Data dummy Factory bergaya Indonesia
+APP_FAKER_LOCALE=id_ID
+```
+
+### 4. Buat database
+
+Nyalakan **MySQL** di XAMPP Control Panel, lalu buat database kosong bernama `db_perpustakaan` (lewat phpMyAdmin di `http://localhost/phpmyadmin`, atau lewat terminal MySQL):
+
+```sql
+CREATE DATABASE db_perpustakaan;
+```
+
+### 5. Migrate & seed
+
+```bash
+php artisan migrate:fresh --seed
+```
+
+Perintah ini membuat ulang seluruh tabel lalu mengisinya lewat `DatabaseSeeder` dengan urutan: `UserSeeder` → `CategorySeeder` → `BookSeeder` → `MemberSeeder` → `LoanSeeder`.
+
+> ⚠️ `migrate:fresh` **menghapus semua data** yang ada di database. Jalankan lagi kapan saja untuk mengembalikan aplikasi ke kondisi demo yang bersih.
+
+### 6. Jalankan dua server
+
+Buka **dua terminal** di folder project, lalu jalankan masing-masing:
+
+```bash
+# Terminal 1 - server utama, diakses dari browser
+php artisan serve --port=8000
+```
+
+```bash
+# Terminal 2 - server khusus panggilan API internal
+php artisan serve --port=8011
+```
+
+Buka aplikasi di **http://127.0.0.1:8000**. Biarkan kedua terminal tetap berjalan selama aplikasi dipakai.
+
+#### Kenapa harus dua server?
+
+`php artisan serve` hanya bisa memproses **satu request dalam satu waktu**. Halaman Dashboard dan Laporan memanggil API aplikasinya sendiri lewat `Http::get()`. Kalau API itu dipanggil ke server yang sama (port 8000), server sedang sibuk memproses halaman yang justru menunggu balasan API tersebut, sehingga keduanya saling menunggu tanpa akhir (*deadlock*). Server kedua di port 8011 menangani panggilan API internal itu secara terpisah.
+
+Kalau server port 8011 tidak dijalankan, aplikasi tetap bisa dibuka - Dashboard akan menampilkan angka `0` dan Laporan akan kosong (ditangani lewat `try/catch ConnectionException`).
+
+## Akun Demo
+
+Dibuat otomatis oleh `UserSeeder`:
+
+| Nama | Email | Password | Role |
+|---|---|---|---|
+| Bambang Sutrisno | `admin@pens.ac.id` | `password` | admin |
+| Siti Rahmawati | `petugas1@pens.ac.id` | `password` | petugas |
+| Ahmad Fauzi | `petugas2@pens.ac.id` | `password` | petugas |
+
+## Halaman Utama
+
+| URL | Keterangan | Akses |
+|---|---|---|
+| `/login` | Form login | Publik |
+| `/` | Dashboard statistik (dari `GET /api/stats`) | Login |
+| `/books` | CRUD buku | Login |
+| `/categories` | CRUD kategori | Admin |
+| `/members` | CRUD anggota, dengan pencarian nama | Login |
+| `/loans` | CRUD peminjaman + tombol Kembalikan | Login |
+| `/loans/report` | Laporan peminjaman (dari `GET /api/loans`) | Login |
+| `/profil` | Profil akun + ganti password | Login |
+
+## REST API
+
+Base URL: `http://127.0.0.1:8000/api`. Seluruh endpoint saat ini publik (tanpa autentikasi token).
+
+| Method | URL | Keterangan |
+|---|---|---|
+| GET | `/api/books` | Daftar buku (filter `?judul=`, `?category_id=`) |
+| GET | `/api/books/{id}` | Detail buku |
+| POST | `/api/books` | Tambah buku |
+| PUT | `/api/books/{id}` | Ubah buku |
+| DELETE | `/api/books/{id}` | Hapus buku |
+| GET | `/api/members` | Daftar anggota |
+| GET | `/api/members/{id}` | Detail anggota |
+| GET | `/api/loans` | Daftar peminjaman |
+| POST | `/api/loans` | Tambah peminjaman |
+| PUT | `/api/loans/{id}/kembalikan` | Proses pengembalian |
+| GET | `/api/stats` | Statistik ringkas |
+
+Contoh body, response, dan status code tiap endpoint ada di [`API.md`](API.md). Skenario demo lengkap ada di [`DEMO.md`](DEMO.md).
+
+## Troubleshooting
+
+| Gejala | Penyebab & solusi |
+|---|---|
+| `SQLSTATE[HY000] [2002] ... actively refused it` | MySQL belum menyala. Start MySQL di XAMPP Control Panel. |
+| Dashboard menampilkan `0 / 0 / 0`, Laporan kosong | Server port 8011 belum dijalankan. Jalankan `php artisan serve --port=8011`. |
+| Halaman Dashboard menggantung lama lalu error | `INTERNAL_API_URL` menunjuk ke port yang sama dengan server utama (8000). Ganti ke 8011. |
+| `Unknown database 'db_perpustakaan'` | Database belum dibuat. Lihat langkah 4. |
+| Perubahan `.env` tidak terbaca | Matikan lalu jalankan ulang kedua server, atau jalankan `php artisan config:clear`. |
+
+## Riwayat Pengerjaan
+
+| Pertemuan | Materi |
+|---|---|
+| 1 | Inisialisasi project Laravel 12 |
+| 2 | Routing & request lifecycle |
+| 3 | Controller, request & validasi |
+| 4 | Blade layout |
+| 5 | Migration, Eloquent & CRUD |
+| 7 | Eloquent relationships & peminjaman |
+| 8 | Autentikasi & middleware |
+| 9 | REST API dasar |
+| 10 | Konsumsi API, seeder & factory |
+
+---
+
+Hilmi Syahputra Wahyudi · D4 Teknik Informatika · PENS
